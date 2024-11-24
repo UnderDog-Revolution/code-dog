@@ -13,3 +13,4 @@ config.dev.json
 config.prod.json
 
 venv/
+main/board.py
