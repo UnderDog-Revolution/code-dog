@@ -3,18 +3,22 @@ const path = require('node:path');
 // Require the necessary discord.js classes
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
+const { scheduleReminders } = require('./reminder.js');
 
+// 서버 시간대를 KST로 설정
+process.env.TZ = 'Asia/Seoul';
 
-// Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// When the client is ready, run this code (only once).
-// The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
-// It makes some properties non-nullable.
 client.once(Events.ClientReady, readyClient => {
-	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
+    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 
+    // 서버 시간 확인
+    console.log('Current server time (local):', new Date().toString());
+    console.log('Current server time (UTC):', new Date().toISOString());
+
+    scheduleReminders(client);
+});
 
 // 커맨드 등록 
 client.commands = new Collection();
